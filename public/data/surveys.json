@@ -1,0 +1,30 @@
+{
+  "surveys": [
+    {
+      "id": 1,
+      "responses": {
+        "exhibition_name": "현대미술의 새로운 시선",
+        "first_impression": "전시장에 들어서자마자 압도되는 규모와 색감에 놀랐습니다.",
+        "memorable_work": "가장 기억에 남는 작품은 입구의 대형 설치미술이었어요. 빛과 그림자의 조화가 인상적이었습니다.",
+        "emotional_response": "작품들을 보면서 평소 느끼지 못했던 감정들이 올라왔어요. 특히 슬픔과 기쁨이 동시에 느껴지는 묘한 경험이었습니다.",
+        "overall_experience": "전체적으로 매우 만족스러운 경험이었습니다. 다음에도 이런 전시가 있다면 꼭 참여하고 싶어요."
+      },
+      "timestamp": "2025-09-20T10:30:00Z"
+    },
+    {
+      "id": 1758301832315,
+      "responses": {
+        "exhibition_name": "asdfasdfasdf",
+        "first_impression": "asdfasdfasdf",
+        "memorable_work": "asdfasdfasdf",
+        "emotional_response": "asdfasdfasdf",
+        "overall_experience": "asdfasdfasdf"
+      },
+      "timestamp": "2025-09-19T17:10:32.315Z"
+    }
+  ],
+  "metadata": {
+    "total_responses": 2,
+    "created_at": "2025-09-20T00:00:00Z"
+  }
+}
