@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
-
-const dataDir = path.join(process.cwd(), 'public', 'data');
-const dataFile = path.join(dataDir, 'surveys.json');
+import { kv } from '@vercel/kv';
 
 interface Survey {
   id: number;
@@ -25,12 +21,9 @@ interface SurveyData {
   };
 }
 
-function ensureDataFile() {
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-
-  if (!fs.existsSync(dataFile)) {
+async function getSurveyData(): Promise<SurveyData> {
+  const data = await kv.get<SurveyData>('surveys');
+  if (!data) {
     const initialData: SurveyData = {
       surveys: [],
       metadata: {
@@ -38,14 +31,15 @@ function ensureDataFile() {
         created_at: new Date().toISOString()
       }
     };
-    fs.writeFileSync(dataFile, JSON.stringify(initialData, null, 2));
+    await kv.set('surveys', initialData);
+    return initialData;
   }
+  return data;
 }
 
 export async function GET() {
   try {
-    ensureDataFile();
-    const data = JSON.parse(fs.readFileSync(dataFile, 'utf8')) as SurveyData;
+    const data = await getSurveyData();
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error reading surveys:', error);
@@ -58,10 +52,8 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    ensureDataFile();
-
     const body = await request.json();
-    const data = JSON.parse(fs.readFileSync(dataFile, 'utf8')) as SurveyData;
+    const data = await getSurveyData();
 
     const newSurvey: Survey = {
       id: Date.now(),
@@ -72,7 +64,7 @@ export async function POST(request: NextRequest) {
     data.surveys.push(newSurvey);
     data.metadata.total_responses = data.surveys.length;
 
-    fs.writeFileSync(dataFile, JSON.stringify(data, null, 2));
+    await kv.set('surveys', data);
 
     return NextResponse.json(
       { success: true, id: newSurvey.id },
